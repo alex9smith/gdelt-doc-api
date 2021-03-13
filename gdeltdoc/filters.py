@@ -1,8 +1,7 @@
-import requests
-
-from typing import Optional, List, Union, Tuple
+from typing import Optional, List, Union
 
 Filter = Union[List[str], str]
+
 
 def near(n: int, *args) -> str:
     """
@@ -129,8 +128,8 @@ class Filters:
     def query_string(self) -> str:
         return "".join(self.query_params)
 
-
-    def _filter_to_string(self, name: str, f: Filter) -> str:
+    @staticmethod
+    def _filter_to_string(name: str, f: Filter) -> str:
         """
         Convert a Filter into the string representation needed for the API.
 
@@ -154,8 +153,8 @@ class Filters:
             # Build an OR statement
             return "(" + " OR ".join([f"{name}:{clause}" for clause in f]) + ")"
 
-
-    def _keyword_to_string(self, keywords: Filter) -> str:
+    @staticmethod
+    def _keyword_to_string(keywords: Filter) -> str:
         """
         Convert a Filter for keywords into the string for the API.
         The keyword argument is different to all the others in that there's
