@@ -33,7 +33,7 @@ class ArticleSearchTestCast(unittest.TestCase):
         )
 
     def test_rows_returned(self):
-        # This test could fail if there really are no articles
+        # This tests could fail if there really are no articles
         # that match the filter, but given the query used for 
         # testing that's very unlikely.
         self.assertGreaterEqual(self.articles.shape[0], 1)
@@ -43,7 +43,7 @@ class TimelineSearchTestCase(unittest.TestCase):
     """
     Test that the various modes of timeline search behave corectly.
     """
-    # Make one set of API calls per test suite run, not one per test
+    # Make one set of API calls per tests suite run, not one per tests
 
     @classmethod
     def setUpClass(cls):

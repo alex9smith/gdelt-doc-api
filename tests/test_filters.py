@@ -1,5 +1,4 @@
 from gdeltdoc import Filters, near, repeat
-from datetime import datetime, timedelta
 
 import unittest
 
