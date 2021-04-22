@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="gdeltdoc",
-    version="1.1.0",
+    version="1.2.0",
     author="Alex Smith",
     author_email="alex@alexsmith.dev",
     description="A client for the GDELT 2.0 Doc API",
