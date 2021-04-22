@@ -70,7 +70,7 @@ class Filters:
 
         Filters for `keyword`, `domain`, `domain_exact`, `country` and `theme`
         can be passed either as a single string or as a list of strings. If a list is
-        passed, the values in the list are wrappeed in a boolean OR.
+        passed, the values in the list are wrapped in a boolean OR.
 
         Params
         ------
