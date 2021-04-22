@@ -54,8 +54,9 @@ def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
 class Filters:
     def __init__(
         self,
-        start_date: str,
-        end_date: str,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        timespan: Optional[str] = None,
         num_records: int = 250,
         keyword: Optional[Filter] = None,
         domain: Optional[Filter] = None,
@@ -78,9 +79,15 @@ class Filters:
             The start date for the filter in YYYY-MM-DD format. The API officially only supports the 
             most recent 3 months of articles. Making a request for an earlier date range may still
             return data, but it's not guaranteed.
+            Must provide either `start_date` and `end_date` or `timespan`
 
         end_date
             The end date for the filter in YYYY-MM-DD format.
+
+        timespan
+            A timespan to search for, relative to the time of the request. Must match one of the API's timespan
+            formats - https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
+            Must provide either `start_date` and `end_date` or `timespan`
 
         num_records
             The number of records to return. Only used in article list mode and can be up to 250.
@@ -116,6 +123,13 @@ class Filters:
         self._valid_countries: List[str] = []
         self._valid_themes: List[str] = []
 
+        # Check we have either start/end date or timespan, but not both
+        if not start_date and not end_date and not timespan:
+            raise ValueError("Must provide either start_date and end_date, or timespan")
+
+        if start_date and end_date and timespan:
+            raise ValueError("Can only provide either start_date and end_date, or timespan")
+
         if keyword:
             self.query_params.append(self._keyword_to_string(keyword))
 
@@ -137,8 +151,12 @@ class Filters:
         if repeat:
             self.query_params.append(repeat)
 
-        self.query_params.append(f'&startdatetime={start_date.replace("-", "")}000000')
-        self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
+        if start_date:
+            self.query_params.append(f'&startdatetime={start_date.replace("-", "")}000000')
+            self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
+        else:
+            # Use timespan
+            self.query_params.append(f"&timespan={timespan}")
 
         if num_records > 250:
             raise ValueError(f"num_records must 250 or less, not {num_records}")
