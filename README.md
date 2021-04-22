@@ -75,3 +75,32 @@ Filters for `keyword`, `domain`, `domain_exact`, `country` and `theme` can be pa
 * `theme` - Return articles that cover one of GDELT's GKG Themes. A full list of themes can be found [here](http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT)
 * `near` - Return articles containing words close to each other in the text. Use `near()` to construct. eg. `near = near(5, "airline", "climate")`.
 * `repeat` - Return articles containing a single word repeated at least a number of times. Use `repeat()` to construct. eg. `repeat =repeat(3, "environment")`, or `multi_repeat()` if you want to use multiple restrictions eg. `repeat = multi_repeat([(2, "airline"), (3, "airport")], "AND")`
+
+## Developing gdelt-doc-api
+
+PRs & issues are very welcome!
+
+### Setup
+It's recommended to use a virtual environment for development. Set one up with
+```
+python -m venv venv
+```
+and activate it (on Mac or Linux)
+```
+source venv/bin/activate
+```
+Then install the requirements
+```
+pip install -r requirements.txt
+```
+Tests for this package use `unittest`. Run them with
+```
+python -m unittest
+```
+If your PR adds a new feature or helper, please also add some tests
+
+### Publishing
+There's a bit of automation set up to help publish a new version of the package to PyPI, 
+1. Make sure the version string has been updated since the last release. This package follows semantic versioning.
+2. Create a new release in the Github UI, using the new version as the release name
+3. Watch as the `publish.yml` Github action builds the package and pushes it to PyPI
