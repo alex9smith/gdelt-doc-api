@@ -1,8 +1,7 @@
-import requests
-
 from typing import Optional, List, Union, Tuple
 
 Filter = Union[List[str], str]
+
 
 def near(n: int, *args) -> str:
     """
@@ -31,6 +30,25 @@ def repeat(n: int, keyword: str) -> str:
         raise ValueError("Only single words can be repeated")
 
     return f'repeat{str(n)}:"{keyword}"'
+
+
+def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
+    """
+    Build the filter to find articles containing multiple repeated words using `repeat()`
+
+    eg. multi_repeat([(2, "airline"), (3, "airport")], "AND") finds articles that contain the word "airline" at least
+    twice and "airport" at least 3 times.
+
+    Params
+    ------
+        repeats: A list of (int, str) tuples to be passed to `repeat()`. Eg. [(2, "airline"), (3, "airport")]
+        method: How to combine the restrictions. Must be one of "AND" or "OR"
+    """
+    if method not in ["AND", "OR"]:
+        raise ValueError(f"method must be one of AND or OR, not {method}")
+
+    to_repeat = [repeat(n, keyword) for (n, keyword) in repeats]
+    return method.join(to_repeat)
 
 
 class Filters:
@@ -84,6 +102,8 @@ class Filters:
         repeat
             Return articles containing a single word repeated at least a number of times. Use `repeat()`
             to construct. eg. repeat = repeat(3, "environment").
+            If you want to construct a filter with multiple repeated words, construct with `multi_repeat()`
+            instead. eg. repeat = multi_repeat([(2, "airline"), (3, "airport")], "AND")
 
         country
             Return articles published in a country, formatted as the FIPS 2 letter country code.

@@ -74,4 +74,4 @@ Filters for `keyword`, `domain`, `domain_exact`, `country` and `theme` can be pa
 * `country` - Return articles published in a country or list of countries, formatted as the FIPS 2 letter country code.
 * `theme` - Return articles that cover one of GDELT's GKG Themes. A full list of themes can be found [here](http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT)
 * `near` - Return articles containing words close to each other in the text. Use `near()` to construct. eg. `near = near(5, "airline", "climate")`.
-* `repeat` - Return articles containing a single word repeated at least a number of times. Use `repeat()` to construct. eg. `repeat = repeat(3, "environment")`.
+* `repeat` - Return articles containing a single word repeated at least a number of times. Use `repeat()` to construct. eg. `repeat =repeat(3, "environment")`, or `multi_repeat()` if you want to use multiple restrictions eg. `repeat = multi_repeat([(2, "airline"), (3, "airport")], "AND")`

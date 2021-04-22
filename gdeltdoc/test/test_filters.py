@@ -1,7 +1,7 @@
-from gdeltdoc import Filters, near, repeat
-from datetime import datetime, timedelta
+from gdeltdoc import Filters, near, repeat, multi_repeat
 
 import unittest
+
 
 class FiltersTestCase(unittest.TestCase):
     """
@@ -31,6 +31,10 @@ class FiltersTestCase(unittest.TestCase):
     def test_theme_and_keyword(self):
         f = Filters(keyword = "airline", theme = "ENV_CLIMATECHANGE", start_date = "2020-05-13", end_date = "2020-05-14")
         self.assertEqual(f.query_string, '"airline"theme:ENV_CLIMATECHANGE&startdatetime=20200513000000&enddatetime=20200514000000&maxrecords=250')
+
+    def test_multiple_repeats(self):
+        f = Filters(keyword="airline", repeat=multi_repeat([(3, "plane"), (2, "airport")], "OR"), start_date = "2020-05-13", end_date = "2020-05-14")
+        self.assertEqual(f.query_string, '"airline"repeat3:"plane"ORrepeat2:"airport"&startdatetime=20200513000000&enddatetime=20200514000000&maxrecords=250')
 
 
 class NearTestCast(unittest.TestCase):
