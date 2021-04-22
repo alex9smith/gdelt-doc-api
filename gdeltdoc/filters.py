@@ -23,7 +23,7 @@ def repeat(n: int, keyword: str) -> str:
 
     eg. repeat(2, "environment") finds articles containing the word "environment"
     at least twice.
-    
+
     Only single word repetitions are allowed.
     """
     if " " in keyword:
@@ -64,7 +64,7 @@ class Filters:
         near: Optional[str] = None,
         repeat: Optional[str] = None,
         country: Optional[Filter] = None,
-        theme: Optional[Filter] = None
+        theme: Optional[Filter] = None,
     ) -> None:
         """
         Construct filters for the GDELT API.
@@ -76,7 +76,7 @@ class Filters:
         Params
         ------
         start_date
-            The start date for the filter in YYYY-MM-DD format. The API officially only supports the 
+            The start date for the filter in YYYY-MM-DD format. The API officially only supports the
             most recent 3 months of articles. Making a request for an earlier date range may still
             return data, but it's not guaranteed.
             Must provide either `start_date` and `end_date` or `timespan`
@@ -128,7 +128,9 @@ class Filters:
             raise ValueError("Must provide either start_date and end_date, or timespan")
 
         if start_date and end_date and timespan:
-            raise ValueError("Can only provide either start_date and end_date, or timespan")
+            raise ValueError(
+                "Can only provide either start_date and end_date, or timespan"
+            )
 
         if keyword:
             self.query_params.append(self._keyword_to_string(keyword))
@@ -144,7 +146,7 @@ class Filters:
 
         if theme:
             self.query_params.append(self._filter_to_string("theme", theme))
-        
+
         if near:
             self.query_params.append(near)
 
@@ -152,7 +154,9 @@ class Filters:
             self.query_params.append(repeat)
 
         if start_date:
-            self.query_params.append(f'&startdatetime={start_date.replace("-", "")}000000')
+            self.query_params.append(
+                f'&startdatetime={start_date.replace("-", "")}000000'
+            )
             self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
         else:
             # Use timespan
@@ -161,12 +165,11 @@ class Filters:
         if num_records > 250:
             raise ValueError(f"num_records must 250 or less, not {num_records}")
 
-        self.query_params.append(f"&maxrecords={str(num_records)}")        
+        self.query_params.append(f"&maxrecords={str(num_records)}")
 
     @property
     def query_string(self) -> str:
         return "".join(self.query_params)
-
 
     def _filter_to_string(self, name: str, f: Filter) -> str:
         """
@@ -192,7 +195,6 @@ class Filters:
             # Build an OR statement
             return "(" + " OR ".join([f"{name}:{clause}" for clause in f]) + ")"
 
-
     def _keyword_to_string(self, keywords: Filter) -> str:
         """
         Convert a Filter for keywords into the string for the API.
@@ -214,4 +216,10 @@ class Filters:
             return f'"{keywords}"'
 
         else:
-            return '('  + " OR ".join([f'"{word}"' if " " in word else word for word in keywords]) + ')'
+            return (
+                "("
+                + " OR ".join(
+                    [f'"{word}"' if " " in word else word for word in keywords]
+                )
+                + ")"
+            )

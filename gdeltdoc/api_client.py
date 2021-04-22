@@ -54,13 +54,12 @@ class GdeltDoc:
 
         Returns
         -------
-        pd.DataFrame    
+        pd.DataFrame
             A pandas DataFrame of the articles returned from the API.
         """
         articles = self._query("artlist", filters.query_string)
 
         return pd.DataFrame(articles["articles"])
-
 
     def timeline_search(self, mode: str, filters: Filters) -> pd.DataFrame:
         """
@@ -70,35 +69,38 @@ class GdeltDoc:
         ------
         mode
             The API mode to call. Must be one of "timelinevol", "timelinevolraw",
-            "timelinetone", "timelinelang", "timelinesourcecountry". 
+            "timelinetone", "timelinelang", "timelinesourcecountry".
 
             See https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/ for a
             longer description of each mode.
 
         filters
             A `gdelt-doc.Filters` object containing the filter parameters for this query.
-        
+
         Returns
         -------
-        pd.DataFrame    
+        pd.DataFrame
             A pandas DataFrame of the articles returned from the API.
         """
         timeline = self._query(mode, filters.query_string)
 
         results = {}
-        results["datetime"] = [entry["date"] for entry in timeline["timeline"][0]["data"]]
+        results["datetime"] = [
+            entry["date"] for entry in timeline["timeline"][0]["data"]
+        ]
 
         for series in timeline["timeline"]:
             results[series["series"]] = [entry["value"] for entry in series["data"]]
 
         if mode == "timelinevolraw":
-            results["All Articles"] = [entry["norm"] for entry in timeline["timeline"][0]["data"]]
+            results["All Articles"] = [
+                entry["norm"] for entry in timeline["timeline"][0]["data"]
+            ]
 
         formatted = pd.DataFrame(results)
         formatted["datetime"] = pd.to_datetime(formatted["datetime"])
 
         return formatted
-
 
     def _query(self, mode: str, query_string: str) -> Dict:
         """
@@ -107,18 +109,25 @@ class GdeltDoc:
         Params
         ------
         mode
-            The API mode to call. Must be one of "artlist", "timelinevol", 
+            The API mode to call. Must be one of "artlist", "timelinevol",
             "timelinevolraw", "timelinetone", "timelinelang", "timelinesourcecountry".
 
         query_string
             The query parameters and date range to call the API with.
-        
+
         Returns
         -------
         Dict
             The parsed JSON response from the API.
         """
-        if mode not in ["artlist", "timelinevol", "timelinevolraw", "timelinetone", "timelinelang", "timelinesourcecountry"]:
+        if mode not in [
+            "artlist",
+            "timelinevol",
+            "timelinevolraw",
+            "timelinetone",
+            "timelinelang",
+            "timelinesourcecountry",
+        ]:
             raise ValueError(f"Mode {mode} not in supported API modes")
 
         return requests.get(
