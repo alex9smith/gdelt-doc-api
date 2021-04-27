@@ -5,42 +5,60 @@ from gdeltdoc.filters import Filters
 
 from typing import Dict
 
+from gdeltdoc.helpers import load_json
+
 
 class GdeltDoc:
-    def __init__(self) -> None:
+    """
+    API client for the GDELT 2.0 Doc API
+
+    ```
+    from gdeltdoc import GdeltDoc, Filters
+
+    f = Filters(
+        keyword = "climate change",
+        start_date = "2020-05-10",
+        end_date = "2020-05-11"
+    )
+
+    gd = GdeltDoc()
+
+    # Search for articles matching the filters
+    articles = gd.article_search(f)
+
+    # Get a timeline of the number of articles matching the filters
+    timeline = gd.timeline_search("timelinevol", f)
+    ```
+
+    ### Article List
+    The article list mode of the API generates a list of news articles that match the filters.
+    The client returns this as a pandas DataFrame with columns `url`, `url_mobile`, `title`,
+    `seendate`, `socialimage`, `domain`, `language`, `sourcecountry`.
+
+    ### Timeline Search
+    There are 5 available modes when making a timeline search:
+    * `timelinevol` - a timeline of the volume of news coverage matching the filters,
+        represented as a percentage of the total news articles monitored by GDELT.
+    * `timelinevolraw` - similar to `timelinevol`, but has the actual number of articles
+        and a total rather than a percentage
+    * `timelinelang` - similar to `timelinevol` but breaks the total articles down by published language.
+        Each language is returned as a separate column in the DataFrame.
+    * `timelinesourcecountry` - similar to `timelinevol` but breaks the total articles down by the country
+        they were published in. Each country is returned as a separate column in the DataFrame.
+    * `timelinetone` - a timeline of the average tone of the news coverage matching the filters.
+        See [GDELT's documentation](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/)
+        for more information about the tone metric.
+    """
+
+    def __init__(self, json_parsing_max_depth: int = 100) -> None:
         """
-        API client for the GDELT 2.0 Doc API
-
-        ```
-        from gdeltdoc import GdeltDoc, Filters
-
-        f = Filters(
-            keyword = "climate change",
-            start_date = "2020-05-10",
-            end_date = "2020-05-11"
-        )
-
-        gd = GdeltDoc()
-
-        # Search for articles matching the filters
-        articles = gd.article_search(f)
-
-        # Get a timeline of the number of articles matching the filters
-        timeline = gd.timeline_search("timelinevol", f)
-        ```
-
-        ### Article List
-        The article list mode of the API generates a list of news articles that match the filters. The client returns this as a pandas DataFrame with columns `url`, `url_mobile`, `title`, `seendate`, `socialimage`, `domain`, `language`, `sourcecountry`.
-
-        ### Timeline Search
-        There are 5 available modes when making a timeline search:
-        * `timelinevol` - a timeline of the volume of news coverage matching the filters, represented as a percentage of the total news articles monitored by GDELT.
-        * `timelinevolraw` - similar to `timelinevol`, but has the actual number of articles and a total rather than a percentage
-        * `timelinelang` - similar to `timelinevol` but breaks the total articles down by published language. Each language is returned as a separate column in the DataFrame.
-        * `timelinesourcecountry` - similar to `timelinevol` but breaks the total articles down by the country they were published in. Each country is returned as a separate column in the DataFrame.
-        * `timelinetone` - a timeline of the average tone of the news coverage matching the filters. See [GDELT's documentation](https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/) for more information about the tone metric.
+        Params
+        ------
+        json_parsing_max_depth
+            A parameter for the json parsing function that removes illegal character. If 100 it will remove at max
+            100 characters before exiting with an exception
         """
-        pass
+        self.max_depth_json_parsing = json_parsing_max_depth
 
     def article_search(self, filters: Filters) -> pd.DataFrame:
         """
@@ -58,8 +76,10 @@ class GdeltDoc:
             A pandas DataFrame of the articles returned from the API.
         """
         articles = self._query("artlist", filters.query_string)
-
-        return pd.DataFrame(articles["articles"])
+        if "articles" in articles:
+            return pd.DataFrame(articles["articles"])
+        else:
+            return pd.DataFrame()
 
     def timeline_search(self, mode: str, filters: Filters) -> pd.DataFrame:
         """
@@ -84,10 +104,7 @@ class GdeltDoc:
         """
         timeline = self._query(mode, filters.query_string)
 
-        results = {}
-        results["datetime"] = [
-            entry["date"] for entry in timeline["timeline"][0]["data"]
-        ]
+        results = {"datetime": [entry["date"] for entry in timeline["timeline"][0]["data"]]}
 
         for series in timeline["timeline"]:
             results[series["series"]] = [entry["value"] for entry in series["data"]]
@@ -130,6 +147,11 @@ class GdeltDoc:
         ]:
             raise ValueError(f"Mode {mode} not in supported API modes")
 
-        return requests.get(
+        response = requests.get(
             f"https://api.gdeltproject.org/api/v2/doc/doc?query={query_string}&mode={mode}&format=json"
-        ).json()
+        )
+
+        if response.status_code not in [200, 202]:
+            raise ValueError("The gdelt api returned a non-successful statuscode. This is the response message: {}".
+                             format(response.text))
+        return load_json(response.content, self.max_depth_json_parsing)
