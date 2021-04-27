@@ -15,7 +15,9 @@ class ArticleSearchTestCast(unittest.TestCase):
         self.end_date = (datetime.today() - timedelta(days=6)).strftime("%Y-%m-%d")
 
         f = Filters(
-            keyword="environment", start_date=self.start_date, end_date=self.end_date
+            keyword="environment",
+            start_date=self.start_date,
+            end_date=self.end_date
         )
         self.articles = GdeltDoc().article_search(f)
 
@@ -43,41 +45,34 @@ class ArticleSearchTestCast(unittest.TestCase):
     def test_rows_returned(self):
         # This test could fail if there really are no articles
         # that match the filter, but given the query used for
+        # This tests could fail if there really are no articles
+        # that match the filter, but given the query used for 
         # testing that's very unlikely.
         self.assertGreaterEqual(self.articles.shape[0], 1)
 
 
 class TimelineSearchTestCase(unittest.TestCase):
     """
-    Test that the various modes of timeline search behave corectly.
+    Test that the various modes of timeline search behave correctly.
     """
 
-    # Make one set of API calls per test suite run, not one per test
+    # Make one set of API calls per tests suite run, not one per test
     @classmethod
-    def setUpClass(self):
-        self.start_date = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
-        self.end_date = (datetime.today() - timedelta(days=6)).strftime("%Y-%m-%d")
+    def setUpClass(cls):
+        cls.start_date = (datetime.today() - timedelta(days = 7)).strftime("%Y-%m-%d")
+        cls.end_date = (datetime.today() - timedelta(days = 6)).strftime("%Y-%m-%d")
 
         f = Filters(
-            keyword="environment", start_date=self.start_date, end_date=self.end_date
+            keyword="environment",
+            start_date=cls.start_date,
+            end_date=cls.end_date
         )
 
         gd = GdeltDoc()
-
-        self.all_results = [
-            gd.timeline_search(mode, f)
-            for mode in [
-                "timelinevol",
-                "timelinevolraw",
-                "timelinelang",
-                "timelinetone",
-                "timelinesourcecountry",
-            ]
+        cls.all_results = [
+            gd.timeline_search(mode, f) for mode in 
+            ["timelinevol", "timelinevolraw", "timelinelang", "timelinetone", "timelinesourcecountry"]
         ]
-
-    @classmethod
-    def tearDownClass(self):
-        pass
 
     def test_all_modes_return_a_df(self):
         self.assertTrue(
@@ -85,7 +80,9 @@ class TimelineSearchTestCase(unittest.TestCase):
         )
 
     def test_all_modes_return_data(self):
-        self.assertTrue(all([result.shape[0] >= 1 for result in self.all_results]))
+        self.assertTrue(
+            all([result.shape[0] >= 1 for result in self.all_results])
+        )
 
     def test_unsupported_mode(self):
         with self.assertRaisesRegex(ValueError, "not in supported API modes"):
@@ -94,8 +91,8 @@ class TimelineSearchTestCase(unittest.TestCase):
                 Filters(
                     keyword="environment",
                     start_date=self.start_date,
-                    end_date=self.end_date,
-                ),
+                    end_date=self.end_date
+                )
             )
 
     def test_vol_has_two_columns(self):
