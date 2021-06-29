@@ -57,7 +57,7 @@ f = Filters(
     keyword = "climate change",
     domain = ["bbc.co.uk", "nytimes.com"],
     country = ["UK", "US"],
-    theme = "GENERAL_HEALTH,
+    theme = "GENERAL_HEALTH",
     near = near(10, "airline", "carbon"),
     repeat = repeat(5, "planet")
 )
