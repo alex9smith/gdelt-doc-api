@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.1
 Fix bug when only the first of the filter conditions (eg. keyword, near, etc.) was used
 
 ## 1.3.0
