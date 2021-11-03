@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+Fix bug when only the first of the filter conditions (eg. keyword, near, etc.) was used
+
 ## 1.3.0
 Recursively load the JSON response to remove improper characters
 

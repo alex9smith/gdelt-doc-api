@@ -14,7 +14,7 @@ def near(n: int, *args) -> str:
     if len(args) < 2:
         raise ValueError("At least two words must be provided")
 
-    return f"near{str(n)}:" + '"' + " ".join([a for a in args]) + '"'
+    return f"near{str(n)}:" + '"' + " ".join([a for a in args]) + '" '
 
 
 def repeat(n: int, keyword: str) -> str:
@@ -29,7 +29,7 @@ def repeat(n: int, keyword: str) -> str:
     if " " in keyword:
         raise ValueError("Only single words can be repeated")
 
-    return f'repeat{str(n)}:"{keyword}"'
+    return f'repeat{str(n)}:"{keyword}" '
 
 
 def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
@@ -190,11 +190,11 @@ class Filters:
             The converted filter. Eg. "domain:cnn.com"
         """
         if type(f) == str:
-            return f"{name}:{f}"
+            return f"{name}:{f} "
 
         else:
             # Build an OR statement
-            return "(" + " OR ".join([f"{name}:{clause}" for clause in f]) + ")"
+            return "(" + " OR ".join([f"{name}:{clause}" for clause in f]) + ") "
 
     @staticmethod
     def _keyword_to_string(keywords: Filter) -> str:
@@ -215,7 +215,7 @@ class Filters:
             The converted filter eg. "(airline OR shipping)"
         """
         if type(keywords) == str:
-            return f'"{keywords}"'
+            return f'"{keywords}" '
 
         else:
             return (
@@ -223,5 +223,5 @@ class Filters:
                 + " OR ".join(
                     [f'"{word}"' if " " in word else word for word in keywords]
                 )
-                + ")"
+                + ") "
             )
