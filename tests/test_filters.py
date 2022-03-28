@@ -1,4 +1,4 @@
-from gdeltdoc import Filters, near, repeat
+from gdeltdoc import Filters, near, repeat, multi_repeat
 
 import unittest
 
@@ -62,3 +62,15 @@ class RepeatTestCase(unittest.TestCase):
     def test_repeat_phrase(self):
         with self.assertRaisesRegex(ValueError, "single word"):
             repeat(5, "climate change   ")
+
+class MultiRepeatTestCase(unittest.TestCase):
+    """
+    Test that `multi_repeat() generates the correct filters and errors.
+    """
+
+    def test_multi_repeat(self):
+        self.assertEqual(multi_repeat([(2, "airline"), (3, "airport")], "AND"), 'repeat2:"airline" AND repeat3:"airport" ')
+
+    def test_multi_repeat_checks_method(self):
+        with self.assertRaisesRegex(ValueError, "method must be one of AND or OR"):
+            multi_repeat([(2, "airline"), (3, "airport")], "NOT_A_METHOD")

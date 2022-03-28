@@ -48,7 +48,7 @@ def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
         raise ValueError(f"method must be one of AND or OR, not {method}")
 
     to_repeat = [repeat(n, keyword) for (n, keyword) in repeats]
-    return method.join(to_repeat)
+    return f"{method} ".join(to_repeat)
 
 
 class Filters:
