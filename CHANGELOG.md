@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+Fix a bug in `multi_repeat` which caused a bad response from the API which could not be parsed
+
 ## 1.3.1
 Fix bug when only the first of the filter conditions (eg. keyword, near, etc.) was used
 
