@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.3.2
 Fix a bug in `multi_repeat` which caused a bad response from the API which could not be parsed
 
 ## 1.3.1
