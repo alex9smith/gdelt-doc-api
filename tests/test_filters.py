@@ -71,6 +71,9 @@ class MultiRepeatTestCase(unittest.TestCase):
     def test_multi_repeat(self):
         self.assertEqual(multi_repeat([(2, "airline"), (3, "airport")], "AND"), 'repeat2:"airline" AND repeat3:"airport" ')
 
+    def test_multi_repeat_or(self):
+        self.assertEqual(multi_repeat([(2, "airline"), (3, "airport")], "OR"), '(repeat2:"airline" OR repeat3:"airport" )')
+
     def test_multi_repeat_checks_method(self):
         with self.assertRaisesRegex(ValueError, "method must be one of AND or OR"):
             multi_repeat([(2, "airline"), (3, "airport")], "NOT_A_METHOD")
