@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.3
+Fix a bug in `multi_repeat` which meant any filter using `OR` would fail
+
 ## 1.3.2
 Fix a bug in `multi_repeat` which caused a bad response from the API which could not be parsed
 
