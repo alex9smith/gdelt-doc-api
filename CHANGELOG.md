@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+Validate `timespan` filter parameter to make sure it's an allowed value
+
 ## 1.3.3
 Fix a bug in `multi_repeat` which meant any filter using `OR` would fail
 
