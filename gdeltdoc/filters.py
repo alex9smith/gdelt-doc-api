@@ -1,7 +1,9 @@
 from typing import Optional, List, Union, Tuple
+from string import ascii_lowercase, digits
 
 Filter = Union[List[str], str]
 
+VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
 def near(n: int, *args) -> str:
     """
@@ -164,6 +166,7 @@ class Filters:
             self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
         else:
             # Use timespan
+            self._validate_timespan(timespan)
             self.query_params.append(f"&timespan={timespan}")
 
         if num_records > 250:
@@ -229,3 +232,37 @@ class Filters:
                 )
                 + ") "
             )
+
+    @staticmethod
+    def _validate_timespan(timespan: str) -> None:
+        """
+        Validate that the supplied timespan is in a format recognised by the API.
+        Raises a `ValueError` if the timespan is not recognised.
+
+        Supported timespan units are:
+            - minutes - 15min
+            - hours - 24h or 24hours
+            - days - 30d or 30days
+            - months - 2m or 2months
+
+        Params
+        ------
+        timespan
+            The timespan filter to be checked
+
+        Returns
+        -------
+        None
+        """
+
+        value = timespan.rstrip(ascii_lowercase)
+        unit = timespan[len(value):]
+
+        if unit not in VALID_TIMESPAN_UNITS:
+            raise ValueError(f"Timespan {timespan} is invalid. {unit} is not a supported unit, must be one of {' '.join(VALID_TIMESPAN_UNITS)}")
+
+        if not all(d in digits for d in value):
+            raise ValueError(f"Timespan {timespan} is invalid. {value} could not be converted into an integer")
+
+        if unit == "min" and int(value) < 60:
+            raise ValueError(f"Timespan {timespan} is invalid. Period must be at least 60 minutes")

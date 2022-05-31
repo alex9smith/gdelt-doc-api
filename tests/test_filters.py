@@ -1,4 +1,4 @@
-from gdeltdoc import Filters, near, repeat, multi_repeat
+from gdeltdoc import Filters, near, repeat, multi_repeat, VALID_TIMESPAN_UNITS
 
 import unittest
 
@@ -77,3 +77,32 @@ class MultiRepeatTestCase(unittest.TestCase):
     def test_multi_repeat_checks_method(self):
         with self.assertRaisesRegex(ValueError, "method must be one of AND or OR"):
             multi_repeat([(2, "airline"), (3, "airport")], "NOT_A_METHOD")
+
+class TimespanTestCase(unittest.TestCase):
+    """
+    Test that `Filter._validate_timespan` validates timespans correctly
+    """
+    def test_allows_valid_units(self):
+        for unit in VALID_TIMESPAN_UNITS:
+            try:
+                Filters._validate_timespan(f"60{unit}")
+            except ValueError:
+                self.fail()
+    
+    def test_forbids_invalid_units(self):
+        with self.assertRaisesRegex(ValueError, "is not a supported unit"):
+            Filters._validate_timespan(f"60milliseconds")
+
+    def test_forbids_invalid_values(self):
+        invalid_timespans = ["12.5min", "40days0", "2/3weeks"]
+        for timespan in invalid_timespans:
+            with self.assertRaises(ValueError):
+                Filters._validate_timespan(timespan)
+
+    def test_forbids_incorrectly_formatted_timespans(self):
+        with self.assertRaisesRegex(ValueError, "is not a supported unit"):
+            Filters._validate_timespan(f"min15")
+
+    def test_timespan_greater_than_60_mins(self):
+        with self.assertRaisesRegex(ValueError, "Period must be at least 60 minutes"):
+            Filters._validate_timespan(f"15min")
