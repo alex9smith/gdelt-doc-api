@@ -100,3 +100,9 @@ class TimelineSearchTestCase(unittest.TestCase):
 
     def test_vol_raw_has_three_columns(self):
         self.assertEqual(self.all_results[1].shape[1], 3)
+
+class QueryTestCase(unittest.TestCase):
+
+    def test_handles_invalid_query_string(self):
+        with self.assertRaisesRegex(ValueError, "The query was not valid. The API error message was"):
+            GdeltDoc()._query("artlist", "environment&timespan=mins15")

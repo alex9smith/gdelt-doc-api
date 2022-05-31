@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.4.0
 Validate `timespan` filter parameter to make sure it's an allowed value
+Catch API errors when a query string is invalid and return them to the user
 
 ## 1.3.3
 Fix a bug in `multi_repeat` which meant any filter using `OR` would fail

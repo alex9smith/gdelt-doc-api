@@ -154,4 +154,9 @@ class GdeltDoc:
         if response.status_code not in [200, 202]:
             raise ValueError("The gdelt api returned a non-successful statuscode. This is the response message: {}".
                              format(response.text))
+
+        # Response is text/html if it's an error and application/json if it's ok
+        if "text/html" in response.headers["content-type"]:
+            raise ValueError(f"The query was not valid. The API error message was: {response.text.strip()}")
+
         return load_json(response.content, self.max_depth_json_parsing)
