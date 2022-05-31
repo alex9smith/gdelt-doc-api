@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.4.0
 Validate `timespan` filter parameter to make sure it's an allowed value
 Catch API errors when a query string is invalid and return them to the user
 
