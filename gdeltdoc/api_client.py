@@ -7,6 +7,7 @@ from typing import Dict
 
 from gdeltdoc.helpers import load_json
 
+from gdeltdoc._version import version
 
 class GdeltDoc:
     """
@@ -147,8 +148,13 @@ class GdeltDoc:
         ]:
             raise ValueError(f"Mode {mode} not in supported API modes")
 
+        headers = {
+            "User-Agent": f"GDELT DOC Python API client {version} - https://github.com/alex9smith/gdelt-doc-api"
+        }
+
         response = requests.get(
-            f"https://api.gdeltproject.org/api/v2/doc/doc?query={query_string}&mode={mode}&format=json"
+            f"https://api.gdeltproject.org/api/v2/doc/doc?query={query_string}&mode={mode}&format=json",
+            headers=headers
         )
 
         if response.status_code not in [200, 202]:
