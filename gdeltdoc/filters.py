@@ -5,6 +5,7 @@ Filter = Union[List[str], str]
 
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
+
 def near(n: int, *args) -> str:
     """
     Build the filter to find articles containing words that occur within
@@ -17,6 +18,11 @@ def near(n: int, *args) -> str:
         raise ValueError("At least two words must be provided")
 
     return f"near{str(n)}:" + '"' + " ".join([a for a in args]) + '" '
+
+
+def multi_near(*nears, method: str = "OR"):
+    l_pad, r_pad = (method == "OR") * "(", (method == "OR") * ") "
+    return l_pad + f"{method} ".join(nears) + r_pad
 
 
 def repeat(n: int, keyword: str) -> str:
