@@ -21,7 +21,8 @@ def near(n: int, *args) -> str:
 
 
 def multi_near(*nears, method: str = "OR"):
-    l_pad, r_pad = (method == "OR") * "(", (method == "OR") * ") "
+    paren_flag = len(nears) != 1 and method == "OR"
+    l_pad, r_pad = paren_flag * "(", paren_flag * ") "
     return l_pad + f"{method} ".join(nears) + r_pad
 
 
