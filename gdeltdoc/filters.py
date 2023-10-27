@@ -20,15 +20,21 @@ def near(n: int, *args) -> str:
     return f"near{str(n)}:" + '"' + " ".join([a for a in args]) + '" '
 
 
-def multi_near(*nears, method: str = "OR"):
+def multi_near(nears: List[Tuple[int, str, ...]], method: str = "OR") -> str:
     """
     Build the filter to find articles containing multiple sets of near terms.
 
-    eg. multi_near(near(5, "airline", "crisis"), near(10, "airline", "climate", "change")) finds "airline" and "crisis"
+    eg. multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")]) finds "airline" and "crisis"
     within 5 words, and/or "airline", "climate", and "change" within 10 words
     """
+    if method not in ["AND", "OR"]:
+        raise ValueError(f"method must be one of AND or OR, not {method}")
+
+    nears = [near(n, *args) for (n, *args) in nears]
+
     paren_flag = len(nears) != 1 and method == "OR"
     l_pad, r_pad = paren_flag * "(", paren_flag * ") "
+
     return l_pad + f"{method} ".join(nears) + r_pad
 
 

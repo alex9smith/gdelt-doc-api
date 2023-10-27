@@ -57,17 +57,18 @@ class MultiNearTestCast(unittest.TestCase):
     Test that `near()` generates the right filters and errors.
     """
     def test_single_near(self):
-        self.assertEqual(multi_near(near(5, "airline", "crisis")), near(5, "airline", "crisis"))
+        self.assertEqual(multi_near([(5, "airline", "crisis")]), near(5, "airline", "crisis"))
 
     def test_two_nears(self):
         self.assertEqual(
-            multi_near(near(5, "airline", "crisis"), near(10, "airline", "climate", "change")),
-            "(" + near(5, "airline", "crisis") + "OR " + near(10, "airline", "climate", "change") + ") "
+            multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")]),
+            "(" + near(5, "airline", "crisis") + "OR " +
+            near(10, "airline", "climate", "change") + ") "
         )
 
     def test_two_nears_AND(self):
         self.assertEqual(
-            multi_near(near(5, "airline", "crisis"), near(10, "airline", "climate", "change"), method="AND"),
+            multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")], method="AND"),
             near(5, "airline", "crisis") + "AND " + near(10, "airline", "climate", "change")
         )
 
