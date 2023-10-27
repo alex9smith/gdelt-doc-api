@@ -21,6 +21,12 @@ def near(n: int, *args) -> str:
 
 
 def multi_near(*nears, method: str = "OR"):
+    """
+    Build the filter to find articles containing multiple sets of near terms.
+
+    eg. multi_near(near(5, "airline", "crisis"), near(10, "airline", "climate", "change")) finds "airline" and "crisis"
+    within 5 words, and/or "airline", "climate", and "change" within 10 words
+    """
     paren_flag = len(nears) != 1 and method == "OR"
     l_pad, r_pad = paren_flag * "(", paren_flag * ") "
     return l_pad + f"{method} ".join(nears) + r_pad
