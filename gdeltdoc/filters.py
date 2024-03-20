@@ -161,9 +161,9 @@ class Filters:
 
         if start_date:
             self.query_params.append(
-                f'&startdatetime={start_date.replace("-", "")}000000'
+                f'&startdatetime={start_date.replace("-", "")}'
             )
-            self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
+            self.query_params.append(f'&enddatetime={end_date.replace("-", "")}')
         else:
             # Use timespan
             self._validate_timespan(timespan)
