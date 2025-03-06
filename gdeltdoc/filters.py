@@ -70,6 +70,7 @@ class Filters:
         near: Optional[str] = None,
         repeat: Optional[str] = None,
         country: Optional[Filter] = None,
+        language: Optional[Filter] = None,
         theme: Optional[Filter] = None,
     ) -> None:
         """
@@ -121,6 +122,9 @@ class Filters:
         country
             Return articles published in a country, formatted as the FIPS 2 letter country code.
 
+        language
+            Return articles published in the given language, formatted as the ISO 639 language code.
+
         theme
             Return articles that cover one of GDELT's GKG Themes. A full list of themes can be
             found here: http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT
@@ -149,6 +153,9 @@ class Filters:
 
         if country:
             self.query_params.append(self._filter_to_string("sourcecountry", country))
+
+        if language:
+            self.query_params.append(self._filter_to_string("sourcelang", country))
 
         if theme:
             self.query_params.append(self._filter_to_string("theme", theme))
