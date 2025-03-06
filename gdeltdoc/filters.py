@@ -155,7 +155,7 @@ class Filters:
             self.query_params.append(self._filter_to_string("sourcecountry", country))
 
         if language:
-            self.query_params.append(self._filter_to_string("sourcelang", country))
+            self.query_params.append(self._filter_to_string("sourcelang", language))
 
         if theme:
             self.query_params.append(self._filter_to_string("theme", theme))
