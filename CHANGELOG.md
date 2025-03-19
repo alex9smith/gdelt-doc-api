@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.8.0
 
-Add multiple nears (#31)
+Add multiple nears (#31)(#45)
 
 ## 1.7.0
 
