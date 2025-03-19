@@ -1,5 +1,6 @@
 from typing import Optional, List, Union, Tuple, Unpack
 from string import ascii_lowercase, digits
+from gdeltdoc.validation import validate_tone
 
 Filter = Union[List[str], str]
 
@@ -195,9 +196,11 @@ class Filters:
             self.query_params.append(self._filter_to_string("theme", theme))
 
         if tone:
+            validate_tone(tone)
             self.query_params.append(self._tone_to_string("tone", tone))
 
         if tone_absolute:
+            validate_tone(tone_absolute)
             self.query_params.append(self._tone_to_string("toneabs", tone_absolute))
 
         if near:
