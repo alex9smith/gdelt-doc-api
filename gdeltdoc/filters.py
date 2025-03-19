@@ -1,4 +1,4 @@
-from typing import Optional, List, Union, Tuple
+from typing import Optional, List, Union, Tuple, Unpack
 from string import ascii_lowercase, digits
 
 Filter = Union[List[str], str]
@@ -6,7 +6,7 @@ Filter = Union[List[str], str]
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
 
-def near(n: int, *args) -> str:
+def near(n: int, *args: *tuple[str]) -> str:
     """
     Build the filter to find articles containing words that occur within
     `n` words of each other.
@@ -20,7 +20,9 @@ def near(n: int, *args) -> str:
     return f"near{str(n)}:" + '"' + " ".join([a for a in args]) + '" '
 
 
-def multi_near(nears: List[Tuple[int, str, ...]], method: str = "OR") -> str:
+def multi_near(
+    nears: List[Tuple[int, Unpack[Tuple[str, ...]]]], method: str = "OR"
+) -> str:
     """
     Build the filter to find articles containing multiple sets of near terms.
 
@@ -30,12 +32,12 @@ def multi_near(nears: List[Tuple[int, str, ...]], method: str = "OR") -> str:
     if method not in ["AND", "OR"]:
         raise ValueError(f"method must be one of AND or OR, not {method}")
 
-    nears = [near(n, *args) for (n, *args) in nears]
+    formatted = [near(n, *args) for (n, *args) in nears]
 
-    paren_flag = len(nears) != 1 and method == "OR"
+    paren_flag = len(formatted) != 1 and method == "OR"
     l_pad, r_pad = paren_flag * "(", paren_flag * ") "
 
-    return l_pad + f"{method} ".join(nears) + r_pad
+    return l_pad + f"{method} ".join(formatted) + r_pad
 
 
 def repeat(n: int, keyword: str) -> str:
