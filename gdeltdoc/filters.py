@@ -94,6 +94,8 @@ class Filters:
         country: Optional[Filter] = None,
         language: Optional[Filter] = None,
         theme: Optional[Filter] = None,
+        tone: Optional[Filter] = None,
+        tone_absolute: Optional[Filter] = None,
     ) -> None:
         """
         Construct filters for the GDELT API.
@@ -150,6 +152,16 @@ class Filters:
         theme
             Return articles that cover one of GDELT's GKG Themes. A full list of themes can be
             found here: http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT
+
+        tone
+            Return articles above or below a particular tone score (ie more positive or more negative than
+            a certain threshold). To use, specify either a greater than or less than sign and a positive
+            or negative number (either an integer or floating point number). To find fairly positive
+            articles, search for "tone>5" or to search for fairly negative articles, search for "tone<-5"
+
+        tone_absolute
+            The same as `tone` but ignores the positive/negative sign and lets you simply search for
+            high emotion or low emotion articles, regardless of whether they were happy or sad in tone
         """
         self.query_params: List[str] = []
         self._valid_countries: List[str] = []
@@ -181,6 +193,12 @@ class Filters:
 
         if theme:
             self.query_params.append(self._filter_to_string("theme", theme))
+
+        if tone:
+            self.query_params.append(self._tone_to_string("tone", tone))
+
+        if tone_absolute:
+            self.query_params.append(self._tone_to_string("toneabs", tone_absolute))
 
         if near:
             self.query_params.append(near)
@@ -264,6 +282,31 @@ class Filters:
                 )
                 + ") "
             )
+
+    @staticmethod
+    def _tone_to_string(name: str, tone: Filter) -> str:
+        """
+        Convert a Filter for tone or tone_absolute into the string for the API.
+        Tone is different to the other parameters because it has no colon between
+        the API parameter and the value.
+
+        Params
+        ------
+        name
+            The parameter name as required by the API. Must be either `tone` or `toneabs`
+        tone
+            The tone Filter
+
+        Returns
+        -------
+        str
+            The converted filter eg. "tone>5"
+        """
+        if type(tone) == str:
+            return f"{name}{tone} "
+
+        else:
+            raise NotImplementedError("Multiple tone values are not supported yet.")
 
     @staticmethod
     def _validate_timespan(timespan: str) -> None:

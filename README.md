@@ -84,6 +84,8 @@ You must pass either `start_date` and `end_date`, or `timespan`
 - `theme` - Return articles that cover one of GDELT's GKG Themes. A full list of themes can be found [here](http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT)
 - `near` - Return articles containing words close to each other in the text. Use `near()` to construct. eg. `near = near(5, "airline", "climate")`, or `multi_near()` if you want to use multiple restrictions eg. `multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")], method="AND")` finds "airline" and "crisis" within 5 words, and "airline", "climate", and "change" within 10 words
 - `repeat` - Return articles containing a single word repeated at least a number of times. Use `repeat()` to construct. eg. `repeat =repeat(3, "environment")`, or `multi_repeat()` if you want to use multiple restrictions eg. `repeat = multi_repeat([(2, "airline"), (3, "airport")], "AND")`
+- `tone` - Return articles above or below a particular tone score (ie more positive or more negative than a certain threshold). To use, specify either a greater than or less than sign and a positive or negative number (either an integer or floating point number). To find fairly positive articles, use `tone=">5"` or to search for fairly negative articles, use `tone="<-5"`
+- tone_absolute - The same as `tone` but ignores the positive/negative sign and lets you search for high emotion or low emotion articles, regardless of whether they were happy or sad in tone
 
 ## Developing gdelt-doc-api
 

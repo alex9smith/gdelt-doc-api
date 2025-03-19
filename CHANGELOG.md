@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Add support for `tone` and `tone_absolute` filters (#50)
+
 ## 1.9.0
 
 Fix JSONDecodeError when loading bad responses from the API (#47)

@@ -69,6 +69,18 @@ class FiltersTestCase(unittest.TestCase):
             "enddatetime=20200514000000&maxrecords=250",
         )
 
+    def test_tone_filter(self):
+        f = Filters(
+            keyword="airline",
+            start_date="2020-03-01",
+            end_date="2020-03-02",
+            tone=">10",
+        )
+        self.assertEqual(
+            f.query_string,
+            '"airline" tone>10 &startdatetime=20200301000000&enddatetime=20200302000000&maxrecords=250',
+        )
+
 
 class NearTestCast(unittest.TestCase):
     """
@@ -186,3 +198,14 @@ class TimespanTestCase(unittest.TestCase):
     def test_timespan_greater_than_60_mins(self):
         with self.assertRaisesRegex(ValueError, "Period must be at least 60 minutes"):
             Filters._validate_timespan(f"15min")
+
+
+class ToneFilterToStringTestCase(unittest.TestCase):
+    def test_single_tone(self):
+        self.assertEqual(Filters._tone_to_string("tone", ">5"), "tone>5 ")
+
+    def test_rejects_multiple_tones(self):
+        with self.assertRaisesRegex(
+            NotImplementedError, "Multiple tone values are not supported yet"
+        ):
+            Filters._tone_to_string("tone", [">5", "<10"])
