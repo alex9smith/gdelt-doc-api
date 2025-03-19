@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Add workaround for domain bug to filter docstring
+
 ## 1.10.0
 
 Add support for `tone` and `tone_absolute` filters (#51)
