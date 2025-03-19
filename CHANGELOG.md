@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.9.0
 
 Fix JSONDecodeError when loading bad responses from the API (#47)
 
