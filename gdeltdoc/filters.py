@@ -6,7 +6,7 @@ Filter = Union[List[str], str]
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
 
-def near(n: int, *args: *tuple[str]) -> str:
+def near(n: int, *args) -> str:
     """
     Build the filter to find articles containing words that occur within
     `n` words of each other.
@@ -74,7 +74,8 @@ def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
 
     if method == "AND":
         return f"{method} ".join(to_repeat)
-    elif method == "OR":
+    else:
+        # method == "OR"
         return "(" + f"{method} ".join(to_repeat) + ")"
 
 
@@ -188,12 +189,15 @@ class Filters:
             self.query_params.append(repeat)
 
         if start_date:
+            if not end_date:
+                raise ValueError("Must provide both start_date and end_date")
+
             self.query_params.append(
                 f'&startdatetime={start_date.replace("-", "")}000000'
             )
             self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
-        else:
-            # Use timespan
+
+        elif timespan:
             self._validate_timespan(timespan)
             self.query_params.append(f"&timespan={timespan}")
 
