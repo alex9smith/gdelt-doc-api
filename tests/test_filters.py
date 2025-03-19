@@ -1,4 +1,4 @@
-from gdeltdoc import Filters, near, repeat, multi_repeat, VALID_TIMESPAN_UNITS
+from gdeltdoc import Filters, near, multi_near, repeat, multi_repeat, VALID_TIMESPAN_UNITS
 
 import unittest
 
@@ -79,6 +79,28 @@ class NearTestCast(unittest.TestCase):
     def test_one_word(self):
         with self.assertRaisesRegex(ValueError, "At least two words"):
             near(5, "airline")
+
+
+class MultiNearTestCast(unittest.TestCase):
+    """
+    Test that `near()` generates the right filters and errors.
+    """
+    def test_single_near(self):
+        self.assertEqual(multi_near([(5, "airline", "crisis")]), near(5, "airline", "crisis"))
+
+    def test_two_nears(self):
+        self.assertEqual(
+            multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")]),
+            "(" + near(5, "airline", "crisis") + "OR " +
+            near(10, "airline", "climate", "change") + ") "
+        )
+
+    def test_two_nears_AND(self):
+        self.assertEqual(
+            multi_near([(5, "airline", "crisis"), (10, "airline", "climate", "change")], method="AND"),
+            near(5, "airline", "crisis") + "AND " + near(10, "airline", "climate", "change")
+        )
+
 
 
 class RepeatTestCase(unittest.TestCase):
