@@ -68,7 +68,7 @@ f = Filters(
 )
 ```
 
-Filters for `keyword`, `domain`, `domain_exact`, `country` and `theme` can be passed either as a single string or as a list of strings. If a list is passed, the values in the list are wrappeed in a boolean OR.
+Filters for `keyword`, `domain`, `domain_exact`, `country`, `language` and `theme` can be passed either as a single string or as a list of strings. If a list is passed, the values in the list are wrappeed in a boolean OR.
 
 You must pass either `start_date` and `end_date`, or `timespan`
 
@@ -80,6 +80,7 @@ You must pass either `start_date` and `end_date`, or `timespan`
 - `domain` - Return articles from the specified domain. Does not require an exact match so passing "cnn.com" will match articles from `cnn.com`, `subdomain.cnn.com` and `notactuallycnn.com`.
 - `domain_exact` - Similar to `domain`, but requires an exact match.
 - `country` - Return articles published in a country or list of countries, formatted as the FIPS 2 letter country code.
+- `language` - Return articles published in the given language, formatted as the ISO 639 language code.
 - `theme` - Return articles that cover one of GDELT's GKG Themes. A full list of themes can be found [here](http://data.gdeltproject.org/api/v2/guides/LOOKUP-GKGTHEMES.TXT)
 - `near` - Return articles containing words close to each other in the text. Use `near()` to construct. eg. `near = near(5, "airline", "climate")`.
 - `repeat` - Return articles containing a single word repeated at least a number of times. Use `repeat()` to construct. eg. `repeat =repeat(3, "environment")`, or `multi_repeat()` if you want to use multiple restrictions eg. `repeat = multi_repeat([(2, "airline"), (3, "airport")], "AND")`
