@@ -106,6 +106,10 @@ class GdeltDoc:
         """
         timeline = self._query(mode, filters.query_string)
 
+        # If no results
+        if len(timeline["timeline"]) == 0:
+            return pd.DataFrame()
+
         results = {
             "datetime": [entry["date"] for entry in timeline["timeline"][0]["data"]]
         }
