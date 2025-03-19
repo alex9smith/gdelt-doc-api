@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.10.0
 
-Add support for `tone` and `tone_absolute` filters (#50)
+Add support for `tone` and `tone_absolute` filters (#51)
+Fix type hints in filters (#50)
 
 ## 1.9.0
 
