@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.6.0
 
 Only support Python 3.10 and above (#39)
 Format all files with prettier (#40)
