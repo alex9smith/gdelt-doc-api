@@ -131,6 +131,15 @@ class Filters:
             Return articles from the specified domain. Does not require an exact match so
             passing "cnn.com" will match articles from "cnn.com", "subdomain.cnn.com" and "notactuallycnn.com".
 
+            NOTE: There's a bug in the API when filtering for domains that include a dash (-).
+            If you supply a value for this filter using a domain with a dash you'll always get 0 results.
+
+            As a workaround you can filter using the part of the domain after the dash (eg. cdn-apple.com -> apple.com).
+            The query is an inexact match so this will return results from the domain you want, plus other domains
+            which also match. You'll need to filter the results after you get them back to just the single domain.
+
+            For more information on this bug, please see https://github.com/alex9smith/gdelt-doc-api/issues/35
+
         domain_exact
             Similar to `domain`, but requires an exact match.
 
