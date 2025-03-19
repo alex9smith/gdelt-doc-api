@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.7.0
 
 Add the ability to filter based on 3 letter language (#38)
 
