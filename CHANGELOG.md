@@ -4,6 +4,7 @@
 
 Only support Python 3.10 and above (#39)
 Format all files with prettier (#40)
+Update package dependencies (#41)
 
 ## 1.5.0
 
