@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.10.1
 
-Add workaround for domain bug to filter docstring
+Add workaround for domain bug to filter docstring (#54)
+Handle 0 results in timeline search (#55)
 
 ## 1.10.0
 
