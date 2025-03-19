@@ -21,7 +21,7 @@ def load_json(json_message, max_recursion_depth: int = 100, recursion_depth: int
 
         idx_to_replace = int(e.args[0].split(" ")[-1][:-1])
         json_message = (
-            json_message[:idx_to_replace] + " " + json_message[idx_to_replace + 1 :]
+            json_message[:idx_to_replace] + " " + json_message[idx_to_replace + 1 :]  # type: ignore
         )
         return load_json(json_message, max_recursion_depth, recursion_depth + 1)
 
