@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+Only support Python 3.10 and above (#39)
+Format all files with prettier (#40)
+
 ## 1.5.0
 
 Provide user agent in requests to the API (#22)

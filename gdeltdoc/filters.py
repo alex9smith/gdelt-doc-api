@@ -5,6 +5,7 @@ Filter = Union[List[str], str]
 
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
+
 def near(n: int, *args) -> str:
     """
     Build the filter to find articles containing words that occur within
@@ -256,13 +257,19 @@ class Filters:
         """
 
         value = timespan.rstrip(ascii_lowercase)
-        unit = timespan[len(value):]
+        unit = timespan[len(value) :]
 
         if unit not in VALID_TIMESPAN_UNITS:
-            raise ValueError(f"Timespan {timespan} is invalid. {unit} is not a supported unit, must be one of {' '.join(VALID_TIMESPAN_UNITS)}")
+            raise ValueError(
+                f"Timespan {timespan} is invalid. {unit} is not a supported unit, must be one of {' '.join(VALID_TIMESPAN_UNITS)}"
+            )
 
         if not all(d in digits for d in value):
-            raise ValueError(f"Timespan {timespan} is invalid. {value} could not be converted into an integer")
+            raise ValueError(
+                f"Timespan {timespan} is invalid. {value} could not be converted into an integer"
+            )
 
         if unit == "min" and int(value) < 60:
-            raise ValueError(f"Timespan {timespan} is invalid. Period must be at least 60 minutes")
+            raise ValueError(
+                f"Timespan {timespan} is invalid. Period must be at least 60 minutes"
+            )

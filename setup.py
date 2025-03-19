@@ -10,7 +10,9 @@ with open("gdeltdoc/_version.py", "r") as g:
     version = "1.0.0"
     for line in g.readlines():
         if "version" in line:
-            version = line.split("=")[1].replace("\n", "").replace('"', "").replace(" ", "")
+            version = (
+                line.split("=")[1].replace("\n", "").replace('"', "").replace(" ", "")
+            )
 
 setuptools.setup(
     name="gdeltdoc",
@@ -27,6 +29,6 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.10',
+    python_requires=">=3.10",
     install_requires=requirements,
 )

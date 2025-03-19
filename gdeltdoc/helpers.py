@@ -22,8 +22,11 @@ def load_json(json_message, max_recursion_depth: int = 100, recursion_depth: int
         if isinstance(json_message, bytes):
             json_message.decode("utf-8")
         json_message = list(json_message)
-        json_message[idx_to_replace] = ' '
-        new_message = ''.join(str(m) for m in json_message)
-        return load_json(json_message=new_message, max_recursion_depth=max_recursion_depth,
-                         recursion_depth=recursion_depth+1)
+        json_message[idx_to_replace] = " "
+        new_message = "".join(str(m) for m in json_message)
+        return load_json(
+            json_message=new_message,
+            max_recursion_depth=max_recursion_depth,
+            recursion_depth=recursion_depth + 1,
+        )
     return result
