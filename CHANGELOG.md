@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Fix JSONDecodeError when loading bad responses from the API (#47)
+
 ## 1.8.0
 
 Add multiple nears (#31)(#45)
