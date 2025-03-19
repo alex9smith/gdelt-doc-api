@@ -17,8 +17,8 @@ with open("gdeltdoc/_version.py", "r") as g:
 setuptools.setup(
     name="gdeltdoc",
     version=version,
-    author="Alex Smith",
-    author_email="alex@alexsmith.dev",
+    author="Alex Whitehead-Smith",
+    author_email="alex.me.smith@gmail.com",
     description="A client for the GDELT 2.0 Doc API",
     long_description=long_description,
     long_description_content_type="text/markdown",
