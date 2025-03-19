@@ -15,9 +15,7 @@ class ArticleSearchTestCast(unittest.TestCase):
         self.end_date = (datetime.today() - timedelta(days=6)).strftime("%Y-%m-%d")
 
         f = Filters(
-            keyword="environment",
-            start_date=self.start_date,
-            end_date=self.end_date
+            keyword="environment", start_date=self.start_date, end_date=self.end_date
         )
         self.articles = GdeltDoc().article_search(f)
 
@@ -46,7 +44,7 @@ class ArticleSearchTestCast(unittest.TestCase):
         # This test could fail if there really are no articles
         # that match the filter, but given the query used for
         # This tests could fail if there really are no articles
-        # that match the filter, but given the query used for 
+        # that match the filter, but given the query used for
         # testing that's very unlikely.
         self.assertGreaterEqual(self.articles.shape[0], 1)
 
@@ -59,19 +57,23 @@ class TimelineSearchTestCase(unittest.TestCase):
     # Make one set of API calls per tests suite run, not one per test
     @classmethod
     def setUpClass(cls):
-        cls.start_date = (datetime.today() - timedelta(days = 7)).strftime("%Y-%m-%d")
-        cls.end_date = (datetime.today() - timedelta(days = 6)).strftime("%Y-%m-%d")
+        cls.start_date = (datetime.today() - timedelta(days=7)).strftime("%Y-%m-%d")
+        cls.end_date = (datetime.today() - timedelta(days=6)).strftime("%Y-%m-%d")
 
         f = Filters(
-            keyword="environment",
-            start_date=cls.start_date,
-            end_date=cls.end_date
+            keyword="environment", start_date=cls.start_date, end_date=cls.end_date
         )
 
         gd = GdeltDoc()
         cls.all_results = [
-            gd.timeline_search(mode, f) for mode in 
-            ["timelinevol", "timelinevolraw", "timelinelang", "timelinetone", "timelinesourcecountry"]
+            gd.timeline_search(mode, f)
+            for mode in [
+                "timelinevol",
+                "timelinevolraw",
+                "timelinelang",
+                "timelinetone",
+                "timelinesourcecountry",
+            ]
         ]
 
     def test_all_modes_return_a_df(self):
@@ -80,9 +82,7 @@ class TimelineSearchTestCase(unittest.TestCase):
         )
 
     def test_all_modes_return_data(self):
-        self.assertTrue(
-            all([result.shape[0] >= 1 for result in self.all_results])
-        )
+        self.assertTrue(all([result.shape[0] >= 1 for result in self.all_results]))
 
     def test_unsupported_mode(self):
         with self.assertRaisesRegex(ValueError, "not in supported API modes"):
@@ -91,8 +91,8 @@ class TimelineSearchTestCase(unittest.TestCase):
                 Filters(
                     keyword="environment",
                     start_date=self.start_date,
-                    end_date=self.end_date
-                )
+                    end_date=self.end_date,
+                ),
             )
 
     def test_vol_has_two_columns(self):
@@ -101,8 +101,11 @@ class TimelineSearchTestCase(unittest.TestCase):
     def test_vol_raw_has_three_columns(self):
         self.assertEqual(self.all_results[1].shape[1], 3)
 
+
 class QueryTestCase(unittest.TestCase):
 
     def test_handles_invalid_query_string(self):
-        with self.assertRaisesRegex(ValueError, "The query was not valid. The API error message was"):
+        with self.assertRaisesRegex(
+            ValueError, "The query was not valid. The API error message was"
+        ):
             GdeltDoc()._query("artlist", "environment&timespan=mins15")
