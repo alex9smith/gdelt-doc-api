@@ -1,3 +1,4 @@
+import unittest.mock
 import pandas as pd
 import unittest
 
@@ -100,6 +101,16 @@ class TimelineSearchTestCase(unittest.TestCase):
 
     def test_vol_raw_has_three_columns(self):
         self.assertEqual(self.all_results[1].shape[1], 3)
+
+    def test_handles_empty_API_response(self):
+        gd = GdeltDoc()
+        with unittest.mock.patch.object(gd, "_query") as query_mock:
+            query_mock.return_value = {}
+            result = gd.timeline_search(
+                "timelinetone", Filters(keyword="environment", timespan="1h")
+            )
+            self.assertTrue(type(result) == pd.DataFrame)
+            self.assertEqual(result.shape[0], 0)
 
 
 class QueryTestCase(unittest.TestCase):

@@ -107,7 +107,7 @@ class GdeltDoc:
         timeline = self._query(mode, filters.query_string)
 
         # If no results
-        if len(timeline["timeline"]) == 0:
+        if (timeline == {}) or (len(timeline["timeline"]) == 0):
             return pd.DataFrame()
 
         results = {
