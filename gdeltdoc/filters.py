@@ -1,4 +1,11 @@
-from typing import Optional, List, Union, Tuple, Unpack
+from typing import Optional, List, Union, Tuple
+
+try:
+    from typing import Unpack
+except ImportError:
+    from typing_extensions import Unpack
+
+
 from string import ascii_lowercase, digits
 from gdeltdoc.validation import validate_tone
 

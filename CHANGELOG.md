@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Fix `Unpack` type hint for older Python versions
+
 ## 1.10.1
 
 Add workaround for domain bug to filter docstring (#54)
