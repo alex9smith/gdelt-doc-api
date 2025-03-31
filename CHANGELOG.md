@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.10.3
 
 Handle empty API responses in timeline search
 
