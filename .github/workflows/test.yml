@@ -11,11 +11,14 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.13"
+          python-version: ${{matrix.python}}
 
       - name: Install dependencies
         run: |
