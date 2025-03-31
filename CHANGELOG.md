@@ -1,8 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.10.2
 
-Fix `Unpack` type hint for older Python versions
+Fix `Unpack` type hint for older Python versions (#60)
 
 ## 1.10.1
 
