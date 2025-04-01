@@ -1,3 +1,4 @@
+from datetime import datetime
 from gdeltdoc import (
     Filters,
     near,
@@ -79,6 +80,17 @@ class FiltersTestCase(unittest.TestCase):
         self.assertEqual(
             f.query_string,
             '"airline" tone>10 &startdatetime=20200301000000&enddatetime=20200302000000&maxrecords=250',
+        )
+
+    def test_start_date_as_datetime_is_formatted_as_expected(self):
+        f = Filters(
+            keyword="airline",
+            start_date=datetime(year=2020, month=3, day=1),
+            end_date=datetime(year=2020, month=3, day=2),
+        )
+        self.assertEqual(
+            f.query_string,
+            '"airline" &startdatetime=20200301000000&enddatetime=20200302000000&maxrecords=250',
         )
 
 

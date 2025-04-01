@@ -5,11 +5,12 @@ try:
 except ImportError:
     from typing_extensions import Unpack
 
-
 from string import ascii_lowercase, digits
 from gdeltdoc.validation import validate_tone
+from gdeltdoc.helpers import Date, format_date
 
 Filter = Union[List[str], str]
+
 
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
 
@@ -88,10 +89,11 @@ def multi_repeat(repeats: List[Tuple[int, str]], method: str) -> str:
 
 
 class Filters:
+
     def __init__(
         self,
-        start_date: Optional[str] = None,
-        end_date: Optional[str] = None,
+        start_date: Optional[Date] = None,
+        end_date: Optional[Date] = None,
         timespan: Optional[str] = None,
         num_records: int = 250,
         keyword: Optional[Filter] = None,
@@ -115,13 +117,16 @@ class Filters:
         Params
         ------
         start_date
-            The start date for the filter in YYYY-MM-DD format. The API officially only supports the
+            The start date for the filter. The API officially only supports the
             most recent 3 months of articles. Making a request for an earlier date range may still
             return data, but it's not guaranteed.
+
+            This can either be provided as a string in YYYY-MM-DD format, or as a datetime object in UTC time.
+            Passing a datetime allows you to specify a time down to seconds granularity.
             Must provide either `start_date` and `end_date` or `timespan`
 
         end_date
-            The end date for the filter in YYYY-MM-DD format.
+            The end date for the filter, either a string in YYYY-MM-DD format or a datetime.
 
         timespan
             A timespan to search for, relative to the time of the request. Must match one of the API's timespan
@@ -229,10 +234,8 @@ class Filters:
             if not end_date:
                 raise ValueError("Must provide both start_date and end_date")
 
-            self.query_params.append(
-                f'&startdatetime={start_date.replace("-", "")}000000'
-            )
-            self.query_params.append(f'&enddatetime={end_date.replace("-", "")}000000')
+            self.query_params.append(f"&startdatetime={format_date(start_date)}")
+            self.query_params.append(f"&enddatetime={format_date(end_date)}")
 
         elif timespan:
             self._validate_timespan(timespan)

@@ -72,8 +72,9 @@ Filters for `keyword`, `domain`, `domain_exact`, `country`, `language` and `them
 
 You must pass either `start_date` and `end_date`, or `timespan`
 
-- `start_date` - The start date for the filter in YYYY-MM-DD format. The API officially only supports the most recent 3 months of articles. Making a request for an earlier date range may still return data, but it's not guaranteed.
-- `end_date` - The end date for the filter in YYYY-MM-DD format.
+- `start_date` - The start date for the filter in YYYY-MM-DD format or as a datetime object in UTC time.
+  Passing a datetime allows you to specify a time down to seconds granularity. The API officially only supports the most recent 3 months of articles. Making a request for an earlier date range may still return data, but it's not guaranteed.
+- `end_date` - The end date for the filter in YYYY-MM-DD format or as a datetime object in UTC time.
 - `timespan` - A timespan to search for, relative to the time of the request. Must match one of the API's timespan formats - https://blog.gdeltproject.org/gdelt-doc-2-0-api-debuts/
 - `num_records` - The number of records to return. Only used in article list mode and can be up to 250.
 - `keyword` - Return articles containing the exact phrase `keyword` within the article text.
