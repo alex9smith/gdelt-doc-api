@@ -1,12 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.11.0
 
-Allow datetimes to be passed to `start_date` and `end_date`
+Allow datetimes to be passed to `start_date` and `end_date` (#63)
 
 ## 1.10.3
 
-Handle empty API responses in timeline search
+Handle empty API responses in timeline search (#62)
 
 ## 1.10.2
 
