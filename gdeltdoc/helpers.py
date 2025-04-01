@@ -1,4 +1,9 @@
+from typing import Union
+
 import json
+from datetime import datetime
+
+Date = Union[str, datetime]
 
 
 def load_json(json_message, max_recursion_depth: int = 100, recursion_depth: int = 0):
@@ -26,3 +31,17 @@ def load_json(json_message, max_recursion_depth: int = 100, recursion_depth: int
         return load_json(json_message, max_recursion_depth, recursion_depth + 1)
 
     return result
+
+
+def format_date(date: Date) -> str:
+    """
+    Takes a date as a string in YYYY-MM-DD format or as a datetime and returns it
+    as a string formatted for the API (YYYYMMDDHHMMSS)
+    """
+    if type(date) == str:
+        return f'{date.replace("-", "")}000000'
+    elif type(date) == datetime:
+        # it's a datetime
+        return date.strftime("%Y%m%d%H%M%S")
+    else:
+        raise ValueError(f"Unsupported type for date: {type(date), {date}}")

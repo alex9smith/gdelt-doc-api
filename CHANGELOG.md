@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Allow datetimes to be passed to `start_date` and `end_date`
+
 ## 1.10.3
 
 Handle empty API responses in timeline search
