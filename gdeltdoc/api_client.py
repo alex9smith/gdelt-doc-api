@@ -6,7 +6,7 @@ from gdeltdoc.filters import Filters
 from typing import Dict
 
 from gdeltdoc.helpers import load_json
-
+from gdeltdoc.errors import raise_response_error
 from gdeltdoc._version import version
 
 
@@ -164,14 +164,12 @@ class GdeltDoc:
             headers=headers,
         )
 
-        if response.status_code not in [200, 202]:
-            raise ValueError(
-                "The gdelt api returned a non-successful statuscode. This is the response message: {}".format(
-                    response.text
-                )
-            )
+        raise_response_error(response=response)
 
-        # Response is text/html if it's an error and application/json if it's ok
+        # Sometimes the API responds to an invalid request with a 200 status code
+        # and a text/html content type. I can't figure out a pattern for when that happens so
+        # this raises a ValueError with the response content instead of one of the library's
+        # custom error types.
         if "text/html" in response.headers["content-type"]:
             raise ValueError(
                 f"The query was not valid. The API error message was: {response.text.strip()}"

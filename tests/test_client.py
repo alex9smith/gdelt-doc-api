@@ -1,9 +1,11 @@
 import unittest.mock
 import pandas as pd
 import unittest
+from datetime import datetime, timedelta
 
 from gdeltdoc import GdeltDoc, Filters
-from datetime import datetime, timedelta
+from gdeltdoc.errors import RateLimitError
+from tests.test_errors import build_response
 
 
 class ArticleSearchTestCast(unittest.TestCase):
@@ -120,3 +122,9 @@ class QueryTestCase(unittest.TestCase):
             ValueError, "The query was not valid. The API error message was"
         ):
             GdeltDoc()._query("artlist", "environment&timespan=mins15")
+
+    def test_raises_an_error_when_response_is_bad_status_code(self):
+        with self.assertRaises(RateLimitError):
+            with unittest.mock.patch("requests.get") as requests_mock:
+                requests_mock.return_value = build_response(429)
+                GdeltDoc()._query("artlist", "")

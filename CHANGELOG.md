@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Raise custom errors when the GDELT API returns a non-200 status code (#66)
+
 ## 1.11.0
 
 Allow datetimes to be passed to `start_date` and `end_date` (#63)
