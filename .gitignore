@@ -62,3 +62,7 @@ venv.bak/
 .dmypy.json
 dmypy.json
 .idea/
+
+# IDE and local testing
+.vscode/
+example.py
