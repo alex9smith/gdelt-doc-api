@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.12.0
 
 Raise custom errors when the GDELT API returns a non-200 status code (#66)
 
