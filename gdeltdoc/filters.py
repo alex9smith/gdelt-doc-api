@@ -13,6 +13,7 @@ Filter = Union[List[str], str]
 
 
 VALID_TIMESPAN_UNITS = ["min", "h", "hours", "d", "days", "w", "weeks", "m", "months"]
+VALID_SORT_TYPES = ["DateDesc", "DateAsc", "ToneDesc", "ToneAsc", "HybridRel"]
 
 
 def near(n: int, *args) -> str:
@@ -106,6 +107,7 @@ class Filters:
         theme: Optional[Filter] = None,
         tone: Optional[Filter] = None,
         tone_absolute: Optional[Filter] = None,
+        sort: Optional[str] = None,
     ) -> None:
         """
         Construct filters for the GDELT API.
@@ -184,6 +186,14 @@ class Filters:
         tone_absolute
             The same as `tone` but ignores the positive/negative sign and lets you simply search for
             high emotion or low emotion articles, regardless of whether they were happy or sad in tone
+
+        sort
+            Controls the order of results. Must be one of:
+            - "DateDesc", or "DateAsc" - Sorts results by publication date
+            - "ToneDesc" or "ToneAsc" - Sorts results by tone
+            - "HybridRel" - Default relevance sorting mode for content published after September 16, 2018. 
+               Uses a combination of textual relevance and outlet "popularity".
+               Not available for image searches.
         """
         self.query_params: List[str] = []
         self._valid_countries: List[str] = []
@@ -245,6 +255,11 @@ class Filters:
             raise ValueError(f"num_records must 250 or less, not {num_records}")
 
         self.query_params.append(f"&maxrecords={str(num_records)}")
+
+        if sort:
+            self._validate_sort_type(sort)
+            self.query_params.append(f"&sort={sort}")
+
 
     @property
     def query_string(self) -> str:
@@ -368,4 +383,24 @@ class Filters:
         if unit == "min" and int(value) < 60:
             raise ValueError(
                 f"Timespan {timespan} is invalid. Period must be at least 60 minutes"
+            )
+
+    @staticmethod
+    def _validate_sort_type(sort: str) -> None:
+        """
+        Validate that the supplied sort type is one of the supported options.
+        Raises a `ValueError` if the sort type is not recognized.
+        
+        Params
+        ------
+        sort
+            The sort type to be checked
+            
+        Returns
+        -------
+        None
+        """
+        if sort not in VALID_SORT_TYPES:
+            raise ValueError(
+                f"Sort type {sort} is invalid. Must be one of {', '.join(VALID_SORT_TYPES)}"
             )
